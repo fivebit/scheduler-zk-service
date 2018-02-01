@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-4.0.xsd
+           http://www.springframework.org/schema/task
+           http://www.springframework.org/schema/task/spring-task-4.0.xsd
+           http://java.sun.com/xml/ns/javaee
+           http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+  
+  
+    <import resource="classpath:spring-mail.xml"/>
+    <import resource="classpath:spring-mybatis.xml"/>
+    <import resource="classpath:spring-pool.xml"/>
+    <!-- 采用注释的方式配置bean -->
+    <context:annotation-config />    
+    <!-- 配置要扫描的包 -->    
+    <context:component-scan base-package="com.fivebit"></context:component-scan>
+    <bean id="config" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:filters/common.properties</value>
+                <value>classpath:filters/${profiles.active}/app.properties</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="properties" ref="config" />
+    </bean>
+    <bean id="slog" class="com.fivebit.common.Slog" > </bean>
+    <bean id="sredis" class="com.fivebit.common.Sredis" >
+        <constructor-arg name="host" value ="${redis.host}"/>
+        <constructor-arg name="port" value ="${redis.port}"/>
+        <constructor-arg name="timeout" value ="${redis.timeout}"/>
+        <constructor-arg name="prefix" value ="${redis.prefix}"/>
+        <constructor-arg name="password" value ="${redis.password}"/>
+    </bean>
+    <bean id="akService" class="com.fivebit.service.AkService" >
+        <constructor-arg name="ak_host" value ="${ak.host}"/>
+        <constructor-arg name="user_name" value ="${ak.username}"/>
+        <constructor-arg name="password" value ="${ak.password}"/>
+    </bean>
+    <task:annotation-driven />
+
+</beans> 

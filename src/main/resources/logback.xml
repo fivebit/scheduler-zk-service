@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+	<!-- define attribute -->
+	<property name="logname" value="scheduler-zk-service-api" />
+	<!--<property name="logdir" value="${catalina.home}" /> -->
+	<property name="logdir" value="/data/tomcat" />
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%date{ISO8601} [%thread] %-5level %logger{36} - %msg %n
+			</Pattern>
+		</layout>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>TRACE</level>
+		</filter>
+	</appender>
+
+  	<appender name="dailyRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>${logdir}/logs/${logname}.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		    <!-- daily rollover -->
+			<FileNamePattern>${logdir}/logs/${logname}/${logname}.%d{yyyy-MM-dd}.log</FileNamePattern>
+			
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>			
+		</rollingPolicy>
+ 
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
+		</encoder> 	    
+  	</appender>
+  	<appender name="minuteRollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+		    <!-- rollover every minute -->
+			<FileNamePattern>${logdir}/logs/${logname}-minutes/${logname}-minute.%d{yyyy-MM-dd_HH-mm}.log</FileNamePattern>
+			
+			<!-- keep 1 day worth of history -->
+			<maxHistory>1</maxHistory>			
+		</rollingPolicy>
+ 
+		<encoder>
+			<Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
+		</encoder> 	    
+  	</appender>  	
+  		
+	<logger name="com.fivebit" additivity="false">
+	    <level value="${log.level}" />
+		<appender-ref ref="dailyRollingFileAppender"/>
+		<appender-ref ref="consoleAppender" />
+	</logger>
+
+	<root>
+		<level value="DEBUG" />
+		<appender-ref ref="consoleAppender" />
+	</root>
+</configuration> 

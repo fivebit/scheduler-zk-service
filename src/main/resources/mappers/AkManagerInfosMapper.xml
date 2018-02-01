@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivebit.dao.AkManagerInfosDao">
+
+    <resultMap id="ResultMap" type="com.fivebit.entity.AkManagerInfoEntity">
+    </resultMap>
+
+
+
+    <update id="updateExecIdByJobId" >
+        update scheudler.ak_manager_infos
+        set exec_ids = #{exec_ids},
+        update_time = #{update_time}
+        where job_id = #{job_id}
+    </update>
+    <update id="updateStatusByJobId" >
+        update scheudler.ak_manager_infos
+        set status = #{status},
+        message = #{message},
+        update_time = #{update_time}
+        where job_id = #{job_id}
+    </update>
+
+    <update id="updateExecStatusByJobId" >
+        update scheudler.ak_manager_infos
+        set status = #{status},
+        execution_status= #{execution_status},
+        update_time = #{update_time}
+        where job_id = #{job_id}
+    </update>
+
+    <select id="getAkManagerInfoByJobId" resultMap="ResultMap" parameterType="Integer">
+        select * from scheudler.ak_manager_infos
+        where job_id = #{job_id}
+    </select>
+    <insert id="createAkMamangerInfo"  parameterType="com.fivebit.entity.AkManagerInfoEntity" useGeneratedKeys="true">
+        <selectKey resultType="java.lang.Integer" keyProperty="akManagerId" order="AFTER">
+            SELECT currval('scheudler.ak_manager_infos_ak_manager_id_seq')
+        </selectKey>
+        insert into scheudler.ak_manager_infos
+        (job_id,project_name,project_file,flow_ids,job_ids,exec_ids,status,create_time,execution_status)
+        values
+        (#{jobId},#{projectName},#{projectFile},#{flowIds},#{jobIds},#{execIds},#{status},#{createTime},#{executionStatus});
+    </insert>
+
+</mapper>

@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: scheduler-zk-service
+Implementation-Version: 1.0-SNAPSHOT
+Built-By: fivebit
+Specification-Title: scheduler-zk-service
+Implementation-Vendor-Id: com.fivebit
+Created-By: Apache Maven 3.5.0
+Build-Jdk: 1.8.0_131
+Specification-Version: 1.0-SNAPSHOT
+

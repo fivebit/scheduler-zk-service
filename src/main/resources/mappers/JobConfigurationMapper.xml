@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fivebit.dao.JobConfigurationDao">
+
+    <resultMap id="ResultMap" type="com.fivebit.entity.JobConfigurationEntity">
+    </resultMap>
+
+    <select id="getJobConfigurationsByJobTypeAndSourceName" resultMap="ResultMap">
+        select * from conf.scheudler_job_configuration_info where project_name = #{project} and job_type= #{job_type} and source_name=#{source_name};
+    </select>
+    <insert id="insertJobConfigurationsToHistoryJobInfo">
+        insert into conf.scheudler_job_history_info(
+          job_id ,project_name ,job_type ,source_name ,model_type, var_name ,var_value ,create_time ,modified_time ,created_by ,modified_by ,status
+        )select
+         #{job_name},project_name,job_type,source_name,model_type,var_name,var_value,
+          TO_DATE(to_char(now(),'yyyy-mm-dd'),'yyyy-mm-dd') AS create_time,
+          TO_DATE(to_char(now(),'yyyy-mm-dd'),'yyyy-mm-dd') AS modified_time,
+          'Jason','Jason','1'
+        from conf.scheudler_job_configuration_info where project_name=#{project_name} and job_type=#{job_type} and source_name =#{source_name};
+    </insert>
+</mapper>
